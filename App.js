@@ -60,17 +60,21 @@ const App = () => {
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    flex: 1,
-    justifyContent: 'space-between',
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <ImageBackground
-        source={require('./src/assets/images/background.webp')}
+        source={require('./src/assets/images/background_top.jpg')}
         style={{height: 500}}>
-        <View style={styles.weatherContainer} />
+        <Text
+          style={{
+            color: 'white',
+            textAlign: 'center',
+          }}>
+          Melbourne 10°
+        </Text>
       </ImageBackground>
     </SafeAreaView>
   );
