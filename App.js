@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 // import type {Node} from 'react';
 import {
   ImageBackground,
@@ -28,37 +28,54 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const renderToday = () => (
-  <ImageBackground
-    source={require('./src/assets/images/background_top.jpg')}
-    style={{height: 400}}>
-    <View style={{margin: 20}}>
-      <Text style={styles.cityName}>Melbourne</Text>
-      <View style={styles.tempNowContainer}>
-        <Text style={styles.tempNow}>13.5°</Text>
-        <Image
-          style={styles.iconNow}
-          source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-        />
-      </View>
-      <View style={styles.tempTodayContainer}>
-        <View style={{flexDirection: 'column'}}>
-          <Text style={[styles.tempToday, {fontWeight: 'bold'}]}>16°</Text>
-          <Text style={[styles.tempTodayDescription, {fontWeight: 'bold'}]}>
-            Max
-          </Text>
+import {CITY_PLACEHOLDER} from './src/utils/constant';
+import getCurrentAndForecast from './src/store/services/getCurrentAndForecastAxios';
+import {setWeatherData} from './src/utils/weatherDataConfig';
+
+const renderToday = (isLoading, weather) => {
+  if (isLoading) {
+    return (
+      <ImageBackground
+        source={require('./src/assets/images/background_top.jpg')}
+        style={{height: 400}}>
+        <View style={{margin: 20}}>
+          <Text style={styles.cityName}>Loading...</Text>
         </View>
-        <View style={{flexDirection: 'column'}}>
-          <Text style={styles.tempToday}>9°</Text>
-          <Text style={styles.tempTodayDescription}>Min</Text>
+      </ImageBackground>
+    );
+  }
+
+  return (
+    <ImageBackground
+      source={require('./src/assets/images/background_top.jpg')}
+      style={{height: 400}}>
+      <View style={{margin: 20}}>
+        <Text style={styles.cityName}>{weather?.name}</Text>
+        <View style={styles.tempNowContainer}>
+          <Text style={styles.tempNow}>{weather?.current.temp_current}°</Text>
+          <Image style={styles.iconNow} source={{uri: weather?.current.icon}} />
         </View>
+        <View style={styles.tempTodayContainer}>
+          <View style={{flexDirection: 'column'}}>
+            <Text style={[styles.tempToday, {fontWeight: 'bold'}]}>
+              {weather?.current.temp_max}°
+            </Text>
+            <Text style={[styles.tempTodayDescription, {fontWeight: 'bold'}]}>
+              Max
+            </Text>
+          </View>
+          <View style={{flexDirection: 'column'}}>
+            <Text style={styles.tempToday}>{weather?.current.temp_min}°</Text>
+            <Text style={styles.tempTodayDescription}>Min</Text>
+          </View>
+        </View>
+        <Text style={styles.weatherTodayDescription}>
+          {weather?.current.weather_desc}
+        </Text>
       </View>
-      <Text style={styles.weatherTodayDescription}>
-        Possible shower. Wind easing.
-      </Text>
-    </View>
-  </ImageBackground>
-);
+    </ImageBackground>
+  );
+};
 
 const textColorStyle = isDarkMode => {
   return {
@@ -66,220 +83,118 @@ const textColorStyle = isDarkMode => {
   };
 };
 
-const renderHourly = isDarkMode => (
+const renderHourly = (isDarkMode, weather) => (
   <View style={styles.forecastContainer}>
     <Text style={[styles.forecastTitle, textColorStyle(isDarkMode)]}>
       Hourly Forecast
     </Text>
     <ScrollView horizontal style={{marginHorizontal: -20}}>
-      <View
-        style={[
-          styles.forecastHourlyContainer,
-          styles.borderBottom,
-          styles.borderRight,
-        ]}>
-        <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
-          5pm
-        </Text>
-        <Image
-          style={styles.iconForecast}
-          source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-        />
-        <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
-          15°
-        </Text>
-      </View>
-      <View
-        style={[
-          styles.forecastHourlyContainer,
-          styles.borderBottom,
-          styles.borderRight,
-        ]}>
-        <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
-          5pm
-        </Text>
-        <Image
-          style={styles.iconForecast}
-          source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-        />
-        <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
-          15°
-        </Text>
-      </View>
-      <View
-        style={[
-          styles.forecastHourlyContainer,
-          styles.borderBottom,
-          styles.borderRight,
-        ]}>
-        <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
-          5pm
-        </Text>
-        <Image
-          style={styles.iconForecast}
-          source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-        />
-        <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
-          15°
-        </Text>
-      </View>
-      <View
-        style={[
-          styles.forecastHourlyContainer,
-          styles.borderBottom,
-          styles.borderRight,
-        ]}>
-        <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
-          5pm
-        </Text>
-        <Image
-          style={styles.iconForecast}
-          source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-        />
-        <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
-          15°
-        </Text>
-      </View>
-      <View
-        style={[
-          styles.forecastHourlyContainer,
-          styles.borderBottom,
-          styles.borderRight,
-        ]}>
-        <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
-          5pm
-        </Text>
-        <Image
-          style={styles.iconForecast}
-          source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-        />
-        <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
-          15°
-        </Text>
-      </View>
-      <View
-        style={[
-          styles.forecastHourlyContainer,
-          styles.borderBottom,
-          styles.borderRight,
-        ]}>
-        <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
-          5pm
-        </Text>
-        <Image
-          style={styles.iconForecast}
-          source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-        />
-        <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
-          15°
-        </Text>
-      </View>
-      <View
-        style={[
-          styles.forecastHourlyContainer,
-          styles.borderBottom,
-          styles.borderRight,
-        ]}>
-        <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
-          5pm
-        </Text>
-        <Image
-          style={styles.iconForecast}
-          source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-        />
-        <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
-          15°
-        </Text>
-      </View>
+      {weather?.hourly.map((hourlyWeather, index) => (
+        <View
+          key={index}
+          style={[
+            styles.forecastHourlyContainer,
+            styles.borderBottom,
+            styles.borderRight,
+          ]}>
+          <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
+            {hourlyWeather.timestamp}
+          </Text>
+          <Image
+            style={styles.iconForecast}
+            source={{uri: hourlyWeather.icon}}
+          />
+          <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
+            {hourlyWeather.temp}°
+          </Text>
+        </View>
+      ))}
     </ScrollView>
   </View>
 );
 
-const renderForecast = isDarkMode => (
+const renderForecast = (isDarkMode, weather) => (
   <View style={styles.forecastContainer}>
     <Text style={[styles.forecastTitle, textColorStyle(isDarkMode)]}>
       Daily Forecast
     </Text>
-    <View style={[styles.forecastDailyContainer, styles.borderBottom]}>
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        Tomorrow
-      </Text>
-      <Image
-        style={styles.iconForecast}
-        source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-      />
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        9°
-      </Text>
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        15°
-      </Text>
-    </View>
-    <View style={[styles.forecastDailyContainer, styles.borderBottom]}>
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        Tomorrow
-      </Text>
-      <Image
-        style={styles.iconForecast}
-        source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-      />
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        9°
-      </Text>
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        15°
-      </Text>
-    </View>
-    <View style={[styles.forecastDailyContainer, styles.borderBottom]}>
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        Tomorrow
-      </Text>
-      <Image
-        style={styles.iconForecast}
-        source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-      />
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        9°
-      </Text>
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        15°
-      </Text>
-    </View>
-    <View style={[styles.forecastDailyContainer, styles.borderBottom]}>
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        Tomorrow
-      </Text>
-      <Image
-        style={styles.iconForecast}
-        source={{uri: 'https://openweathermap.org/img/wn/10d@2x.png'}}
-      />
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        9°
-      </Text>
-      <Text style={[styles.forecastDailyWeekday, textColorStyle(isDarkMode)]}>
-        15°
-      </Text>
-    </View>
+    {weather?.daily.map((dailyWeather, index) => (
+      <View
+        key={index}
+        style={[styles.forecastDailyContainer, styles.borderBottom]}>
+        <Text
+          style={[
+            styles.forecastDailyWeekName,
+            styles.forecastDailyWeekday,
+            textColorStyle(isDarkMode),
+          ]}>
+          {dailyWeather.timestamp}
+        </Text>
+        <Image style={styles.iconForecast} source={{uri: dailyWeather.icon}} />
+        <Text
+          style={[
+            styles.forecastDailyTemp,
+            styles.forecastDailyWeekday,
+            textColorStyle(isDarkMode),
+          ]}>
+          {dailyWeather.temp_min}°
+        </Text>
+        <Text
+          style={[
+            styles.forecastDailyTemp,
+            styles.forecastDailyWeekday,
+            textColorStyle(isDarkMode),
+          ]}>
+          {dailyWeather.temp_max}°
+        </Text>
+      </View>
+    ))}
   </View>
 );
 
 const App = () => {
+  const [weather, setWeather] = useState();
+
+  useEffect(() => {
+    const {id, name, coord} = CITY_PLACEHOLDER;
+    const fetchWeather = async () => {
+      const {data} = await getCurrentAndForecast(coord);
+      if (data.current) {
+        const filteredData = setWeatherData(id, name, data);
+        setWeather(filteredData);
+        console.log('API CALLED!!');
+      }
+    };
+    fetchWeather();
+  }, [0]);
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.darker : null,
   };
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView>
-        {renderToday()}
-        {renderHourly(isDarkMode)}
-        {renderForecast(isDarkMode)}
-      </ScrollView>
-    </SafeAreaView>
-  );
+  if (!weather) {
+    return (
+      <SafeAreaView style={backgroundStyle}>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <ScrollView>{renderToday(true)}</ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  if (weather) {
+    return (
+      <SafeAreaView style={backgroundStyle}>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <ScrollView>
+          {renderToday(false, weather)}
+          {renderHourly(isDarkMode, weather)}
+          {renderForecast(isDarkMode, weather)}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -331,7 +246,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   forecastTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '500',
     marginBottom: 20,
   },
@@ -356,6 +271,12 @@ const styles = StyleSheet.create({
   forecastDailyWeekday: {
     fontSize: 18,
     fontWeight: '500',
+  },
+  forecastDailyWeekName: {
+    width: 110,
+  },
+  forecastDailyTemp: {
+    width: 45,
   },
 });
 
