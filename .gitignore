@@ -29,6 +29,8 @@ build/
 local.properties
 *.iml
 *.hprof
+# Android/credentials
+android/app/.keystore
 
 # node.js
 #
