@@ -17,7 +17,7 @@ const BREAKPOINT1 = 320;
 
 // const BASEURL_BACKEND = 'http://localhost:3001';
 export const BASEURL_BACKEND =
-  'http://weatherappback-env.eba-hqsejjke.ap-southeast-2.elasticbeanstalk.com';
+  'http://weatherappback-env.eba-dq4s5qry.ap-southeast-2.elasticbeanstalk.com';
 
 export const PAGE_SIZE = 3;
 
