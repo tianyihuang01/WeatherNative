@@ -13,7 +13,7 @@ The Technology stack used:
 ### To run this app:
 - follow the instruction on React Native [documentation](https://reactnative.dev/docs/environment-setup).
 - Alternatively, download the apk file to run it on an Android emulator or a real Android device.
-	* [Version 0.1 for Android](https://drive.google.com/file/d/186ch0zgqkP3EIE-lqzCaU7t96X_Ci3OD/view)
+	* [Version 0.2 for Android](https://drive.google.com/file/d/1I3cID6QC4LZ1suy7Ws2rTCDMSf4geVhQ/view) - add "feels like" temperature
 
 ### Main Feature
 1. Display the current weather in Melbourne.
