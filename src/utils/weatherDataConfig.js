@@ -72,7 +72,7 @@ export const setWeatherData = (id, name, weatherData) => {
       timestamp: getTimeFromUnix(weatherData.hourly[i].dt, TIME_FORMAT.HH), //convert time format (to hour)
       icon: getIconUrl(weatherData.hourly[i].weather[0].icon),
       temp: Math.round(weatherData.hourly[i].temp),
-      feels_like: Math.round(weatherData.hourly[i].feels_like),
+      feels_like: Math.round(weatherData.hourly[i].feels_like * 10) / 10,
       rain_last_hour: weatherData.hourly[i].rain
         ? weatherData.hourly[i].rain['1h']
         : null,

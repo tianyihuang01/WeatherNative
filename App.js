@@ -55,6 +55,9 @@ const renderToday = (isLoading, weather) => {
           <Text style={styles.tempNow}>{weather?.current.temp_current}°</Text>
           <Image style={styles.iconNow} source={{uri: weather?.current.icon}} />
         </View>
+        <Text style={styles.tempTodayFeels}>
+          Feels like {weather?.current.feels_like}°
+        </Text>
         <View style={styles.tempTodayContainer}>
           <View style={{flexDirection: 'column'}}>
             <Text style={[styles.tempToday, {fontWeight: 'bold'}]}>
@@ -90,26 +93,38 @@ const renderHourly = (isDarkMode, weather) => (
     </Text>
     <ScrollView horizontal style={{marginHorizontal: -20}}>
       {weather?.hourly.map((hourlyWeather, index) => (
-        <View
-          key={index}
-          style={[
-            styles.forecastHourlyContainer,
-            styles.borderBottom,
-            styles.borderRight,
-          ]}>
-          <Text style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
-            {hourlyWeather.timestamp}
-          </Text>
-          <Image
-            style={styles.iconForecast}
-            source={{uri: hourlyWeather.icon}}
-          />
-          <Text style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
-            {hourlyWeather.temp}°
+        <View key={index} style={styles.forecastHourlyContainer}>
+          <View style={[styles.borderBottom, styles.borderRight]}>
+            <Text
+              style={[styles.forecastHourlyTime, textColorStyle(isDarkMode)]}>
+              {hourlyWeather.timestamp}
+            </Text>
+            <Image
+              style={styles.iconForecast}
+              source={{uri: hourlyWeather.icon}}
+            />
+            <Text
+              style={[styles.forecastHourlyTemp, textColorStyle(isDarkMode)]}>
+              {hourlyWeather.temp}°
+            </Text>
+          </View>
+          <Text
+            style={[
+              styles.forecastHourlyFeels,
+              textColorStyle(isDarkMode),
+              styles.borderTop,
+              styles.borderBottom,
+              styles.borderRight,
+              {marginBottom: 1},
+            ]}>
+            {hourlyWeather.feels_like}°
           </Text>
         </View>
       ))}
     </ScrollView>
+    <Text style={[styles.forecastHourlyFeelsText, textColorStyle(isDarkMode)]}>
+      Feels like
+    </Text>
   </View>
 );
 
@@ -198,6 +213,10 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
+  borderTop: {
+    borderTopWidth: 1,
+    borderTopColor: '#d1d1d1',
+  },
   borderBottom: {
     borderBottomWidth: 1,
     borderBottomColor: '#d1d1d1',
@@ -218,7 +237,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 50,
   },
-  iconNow: {width: 100, height: 100},
+  iconNow: {width: 100, height: 80},
   iconForecast: {width: 65, height: 65},
   tempTodayContainer: {
     flexDirection: 'row',
@@ -229,6 +248,12 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 25,
+  },
+  tempTodayFeels: {
+    color: 'white',
+    textAlign: 'left',
+    fontSize: 20,
+    paddingBottom: 5,
   },
   tempTodayDescription: {
     color: 'white',
@@ -262,6 +287,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
     fontWeight: '500',
+  },
+  forecastHourlyFeels: {
+    marginTop: 30,
+    textAlign: 'center',
+    fontSize: 19,
+  },
+  forecastHourlyFeelsText: {
+    marginHorizontal: -20,
+    paddingLeft: 10,
+    textAlign: 'left',
+    fontSize: 15,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 177,
   },
   forecastDailyContainer: {
     flexDirection: 'row',
