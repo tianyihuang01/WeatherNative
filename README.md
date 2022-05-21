@@ -4,7 +4,7 @@ This is mobile weather app build with [React Native](https://reactnative.dev/)
 
 The Technology stack used:
 
-- HTML5, CSS, JavaScript (Vanilla, ES6)
+- HTML5, CSS, JavaScript (Vanilla, ES6), Hooks
 - **Styling:** StyleSheet in React Native
 - **API:** [OpenWeatherAPI](https://openweathermap.org/api)
 - **API Call:** Axios
@@ -13,7 +13,7 @@ The Technology stack used:
 ### To run this app:
 - follow the instruction on React Native [documentation](https://reactnative.dev/docs/environment-setup).
 - Alternatively, download the apk file to run it on an Android emulator or a real Android device.
-	* [Version 0.2 for Android](https://drive.google.com/file/d/1I3cID6QC4LZ1suy7Ws2rTCDMSf4geVhQ/view) - add "feels like" temperature
+	* [Version 0.3 for Android](https://drive.google.com/file/d/1xUGqUigaaSx_m1ubQHg1ZEbUPfmLBAV3/view) - display images according to the weather description
 
 ### Main Feature
 1. Display the current weather in Melbourne.

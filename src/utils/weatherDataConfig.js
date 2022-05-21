@@ -1,4 +1,23 @@
-import {weekName, TIME_FORMAT} from './constant';
+import {weekName, TIME_FORMAT, imgName} from './constant';
+
+const getImg = weatherId => {
+  let selectedImg;
+  let imgList = [];
+  if (weatherId >= 200 && weatherId < 700) {
+    const firstDigit = String(weatherId)[0];
+    imgList = imgName.filter(img => img[0] === firstDigit);
+  } else {
+    const threeDigits = String(weatherId).substring(0, 3);
+    imgList = imgName.filter(img => img.substring(0, 3) === threeDigits);
+  }
+  if (imgList.length > 0) {
+    selectedImg = imgList[Math.floor(Math.random() * imgList.length)];
+  } else {
+    selectedImg = '000-0';
+  }
+  return `${selectedImg}`;
+  // return `./src/assets/images/${selectedImg}.jpg`;
+};
 
 const getIconUrl = iconId => {
   return `https://openweathermap.org/img/wn/${iconId}@2x.png`;
@@ -45,6 +64,8 @@ export const setWeatherData = (id, name, weatherData) => {
     feels_like: Math.round(weatherData.current.feels_like * 10) / 10,
     temp_max: Math.round(weatherData.daily[0].temp.max),
     temp_min: Math.round(weatherData.daily[0].temp.min),
+    weather_id: weatherData.current.weather[0].id,
+    weather_img: getImg(weatherData.current.weather[0].id),
     weather_desc: weatherData.current.weather[0].description,
     weather_desc_brief: weatherData.current.weather[0].main,
     icon: getIconUrl(weatherData.current.weather[0].icon),
@@ -70,6 +91,8 @@ export const setWeatherData = (id, name, weatherData) => {
   for (let i = 0; i < weatherData.hourly.length; i++) {
     const hourlyData = {
       timestamp: getTimeFromUnix(weatherData.hourly[i].dt, TIME_FORMAT.HH), //convert time format (to hour)
+      weather_id: weatherData.hourly[i].weather[0].id,
+      weather_img: getImg(weatherData.hourly[i].weather[0].id),
       icon: getIconUrl(weatherData.hourly[i].weather[0].icon),
       temp: Math.round(weatherData.hourly[i].temp),
       feels_like: Math.round(weatherData.hourly[i].feels_like * 10) / 10,
@@ -97,6 +120,8 @@ export const setWeatherData = (id, name, weatherData) => {
         i === 1
           ? 'Tomorrow'
           : getTimeFromUnix(weatherData.daily[i].dt, TIME_FORMAT.DD), //convert time format (to week)
+      weather_id: weatherData.daily[i].weather[0].id,
+      weather_img: getImg(weatherData.daily[i].weather[0].id),
       icon: getIconUrl(weatherData.daily[i].weather[0].icon),
       temp_max: Math.round(weatherData.daily[i].temp.max),
       temp_min: Math.round(weatherData.daily[i].temp.min),

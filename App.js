@@ -28,7 +28,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {CITY_PLACEHOLDER} from './src/utils/constant';
+import {CITY_PLACEHOLDER, IMG_SOURCE} from './src/utils/constant';
 import getCurrentAndForecast from './src/store/services/getCurrentAndForecastAxios';
 import {setWeatherData} from './src/utils/weatherDataConfig';
 
@@ -36,7 +36,7 @@ const renderToday = (isLoading, weather) => {
   if (isLoading) {
     return (
       <ImageBackground
-        source={require('./src/assets/images/background_top.jpg')}
+        source={IMG_SOURCE[weather?.current.weather_img]}
         style={{height: 400}}>
         <View style={{margin: 20}}>
           <Text style={styles.cityName}>Loading...</Text>
@@ -47,32 +47,50 @@ const renderToday = (isLoading, weather) => {
 
   return (
     <ImageBackground
-      source={require('./src/assets/images/background_top.jpg')}
+      source={IMG_SOURCE[weather?.current.weather_img]}
       style={{height: 400}}>
       <View style={{margin: 20}}>
-        <Text style={styles.cityName}>{weather?.name}</Text>
+        <Text style={[styles.cityName, styles.textShadow]}>
+          {weather?.name}
+        </Text>
         <View style={styles.tempNowContainer}>
-          <Text style={styles.tempNow}>{weather?.current.temp_current}°</Text>
+          <Text style={[styles.tempNow, styles.textShadow]}>
+            {weather?.current.temp_current}°
+          </Text>
           <Image style={styles.iconNow} source={{uri: weather?.current.icon}} />
         </View>
-        <Text style={styles.tempTodayFeels}>
+        <Text style={[styles.tempTodayFeels, styles.textShadow]}>
           Feels like {weather?.current.feels_like}°
         </Text>
         <View style={styles.tempTodayContainer}>
           <View style={{flexDirection: 'column'}}>
-            <Text style={[styles.tempToday, {fontWeight: 'bold'}]}>
+            <Text
+              style={[
+                styles.tempToday,
+                styles.textShadow,
+                {fontWeight: 'bold'},
+              ]}>
               {weather?.current.temp_max}°
             </Text>
-            <Text style={[styles.tempTodayDescription, {fontWeight: 'bold'}]}>
+            <Text
+              style={[
+                styles.tempTodayDescription,
+                styles.textShadow,
+                {fontWeight: 'bold'},
+              ]}>
               Max
             </Text>
           </View>
           <View style={{flexDirection: 'column'}}>
-            <Text style={styles.tempToday}>{weather?.current.temp_min}°</Text>
-            <Text style={styles.tempTodayDescription}>Min</Text>
+            <Text style={[styles.tempToday, styles.textShadow]}>
+              {weather?.current.temp_min}°
+            </Text>
+            <Text style={[styles.tempTodayDescription, styles.textShadow]}>
+              Min
+            </Text>
           </View>
         </View>
-        <Text style={styles.weatherTodayDescription}>
+        <Text style={[styles.weatherTodayDescription, styles.textShadow]}>
           {weather?.current.weather_desc}
         </Text>
       </View>
@@ -236,6 +254,11 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'left',
     fontSize: 50,
+  },
+  textShadow: {
+    textShadowColor: '#000000',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10,
   },
   iconNow: {width: 100, height: 80},
   iconForecast: {width: 65, height: 65},
