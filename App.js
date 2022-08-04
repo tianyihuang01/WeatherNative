@@ -210,7 +210,7 @@ const App = () => {
   if (!weather) {
     return (
       <SafeAreaView style={backgroundStyle}>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <StatusBar barStyle={isDarkMode ? 'dark-content' : 'light-content'} />
         <ScrollView>{renderToday(true)}</ScrollView>
       </SafeAreaView>
     );
@@ -219,7 +219,7 @@ const App = () => {
   if (weather) {
     return (
       <SafeAreaView style={backgroundStyle}>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <StatusBar barStyle={isDarkMode ? 'dark-content' : 'light-content'} />
         <ScrollView>
           {renderToday(false, weather)}
           {renderHourly(isDarkMode, weather)}
