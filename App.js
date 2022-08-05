@@ -10,6 +10,7 @@ import React from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Weather from './src/pages/Weather';
 
@@ -22,7 +23,20 @@ const AppStack = () => {
         screenOptions={{
           headerShown: false,
         }}>
-        <Tab.Screen name="Weather" component={Weather} />
+        <Tab.Screen
+          name="Weather"
+          component={Weather}
+          options={{
+            tabBarLabel: 'Weather',
+            tabBarIcon: ({color, size}) => (
+              <MaterialCommunityIcons
+                name="weather-sunny"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
