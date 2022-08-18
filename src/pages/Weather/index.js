@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 // import type {Node} from 'react';
 import {
   ImageBackground,
@@ -195,22 +195,7 @@ const renderWeatherView = (isDarkMode, backgroundStyle, weather) => (
   </SafeAreaView>
 );
 
-const App = () => {
-  const [weather, setWeather] = useState();
-
-  useEffect(() => {
-    const {id, name, coord} = CITY_PLACEHOLDER;
-    const fetchWeather = async () => {
-      const {data} = await getCurrentAndForecast(coord);
-      if (data.current) {
-        const filteredData = setWeatherData(id, name, data);
-        setWeather(filteredData);
-        console.log('API CALLED!!');
-      }
-    };
-    fetchWeather();
-  }, [0]);
-
+const App = ({weather}) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
