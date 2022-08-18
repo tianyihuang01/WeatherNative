@@ -1,4 +1,4 @@
-import {weekName, TIME_FORMAT, imgName} from './constant';
+import {weekName, TIME_FORMAT, imgName, navIconName} from './constant';
 
 const getImg = weatherId => {
   let selectedImg;
@@ -144,4 +144,40 @@ export const setWeatherData = (id, name, weatherData) => {
     daily: dailyForecastList,
   };
   return filteredData;
+};
+
+export const getNavIconByWeatherIcon = weatherIconId => {
+  switch (weatherIconId) {
+    case '01d':
+    case '01n':
+      return 'weather-sunny';
+    case '02d':
+    case '02n':
+      return 'weather-cloudy';
+    case '03d':
+    case '03n':
+      return 'weather-cloudy';
+    case '04d':
+    case '04n':
+      return 'weather-cloudy';
+    case '09d':
+    case '09n':
+      return 'weather-rainy';
+    case '10d':
+    case '10n':
+      return 'weather-rainy';
+    case '11d':
+    case '11n':
+      return ['weather-rainy', 'weather-lightning'][
+        Math.floor(Math.random() * 2)
+      ];
+    case '13d':
+    case '13n':
+      return 'weather-snowy';
+    case '50d':
+    case '50n':
+      return 'weather-fog';
+    default:
+      return 'weather-sunny';
+  }
 };
